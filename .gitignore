@@ -1,0 +1,24 @@
+# Ignorar toda la carpeta data/ excepto la estructura básica
+data/*
+!data/processed/
+!data/raw_images/
+!data/.gitkeep
+
+# Ignorar específicamente los archivos de imágenes dentro de raw_images
+data/raw_images/**
+
+# Ignorar archivos generados por el sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de entorno y sensibles
+.env
+*.secret
+
+# Ignorar outputs de Python
+__pycache__/
+*.py[cod]
+
+# Ignorar archivos de datos procesados grandes (opcional)
+*.npy
+*.npz
