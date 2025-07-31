@@ -3,7 +3,7 @@ import cv2
 import os
 from sklearn.model_selection import train_test_split
 
-def cargar_y_preprocesar_imagenes(ruta_directorio, size=(700, 600)):
+def cargar_y_preprocesar_imagenes(ruta_directorio, size=(800, 600)):
     """
     Carga y preprocesa imágenes desde un directorio.
     

@@ -6,11 +6,11 @@
 !/data/
 !/data/raw_images/
 !/data/data_processed/
-!/data/test_images/
+!/data/predict_images/
 
 # Permite archivos de texto o markdown para mantener estructura
 !data/*.md
 !data/*.txt
 !data/raw_images/.gitkeep
 !data/data_processed/.gitkeep
-!data/test_images/.gitkeep
+!data/predict_images/.gitkeep
