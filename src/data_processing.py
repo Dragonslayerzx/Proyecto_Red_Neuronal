@@ -60,6 +60,7 @@ def dividir_y_guardar_datos(X, y, ruta_guardado, test_size=0.2, random_state=42)
     
     print(f"Datos guardados en {ruta_guardado}")
 
+"""
 # Funcion principal para ejecutar el procesamiento
 if __name__ == "__main__":
     # 1. Definir rutas básicas
@@ -70,3 +71,4 @@ if __name__ == "__main__":
     # 2. Procesar y guardar
     X, y = cargar_y_preprocesar_imagenes(RAW_DIR)
     dividir_y_guardar_datos(X, y, PROCESSED_DIR)
+"""

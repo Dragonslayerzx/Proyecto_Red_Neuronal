@@ -12,7 +12,9 @@ def cargar_modelo(ruta_modelo, capas):
     Returns:
         RedNeuronal: Modelo con pesos cargados
     """
+    #print("Cargando modelo desde:", ruta_modelo)
     datos = np.load(ruta_modelo)
+    #print("Claves en el archivo del modelo:", list(datos.keys()))
     modelo = RedNeuronal(capas = capas)
     #Se asignan los pesos en orden
     modelo.pesos = [datos[f'pesos_{i}'] for i in range(len(capas) - 1)]
@@ -42,9 +44,10 @@ def predecir_imagen(modelo, ruta_imagen):
     Returns:
         tuple: (predicción, probabilidad)
     """
+    #print("Tipo de modelo:", type(modelo))
     X = preprocesar_imagen(ruta_imagen)
     prob = modelo.forward(X)[0][0]  # Probabilidad entre 0 y 1
-    return ("TÚ", prob) if prob > 0.5 else ("OTRO", 1 - prob)
+    return ("ROSTRO PRESENTE", prob) if prob > 0.5 else ("ROSTRO AUSENTE", 1 - prob)
 
 def predecir_directorio(modelo, directorio):
     """
@@ -53,7 +56,7 @@ def predecir_directorio(modelo, directorio):
         modelo (RedNeuronal): Modelo entrenado
         directorio (str): Ruta al directorio con imágenes
     """
-    print("\n ========= Resultados de las predicciones =========")
+    print("\n============ Resultados de las predicciones ==============")
     for filename in os.listdir(directorio):
         if filename.lower().endswith((".jpg", ".jpeg", ".png")):
             try:
@@ -63,7 +66,9 @@ def predecir_directorio(modelo, directorio):
             except Exception as e:
                 print(f"Error procesando {filename}: {e}")
 
+"""
 if __name__ == "__main__":
+    print("Iniciando el script de predicción...")
     #Configuracion de rutas
     DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
     MODELO_DIR = os.path.join(DATA_DIR, "data_processed", "modelo_entrenado.npz")
@@ -74,4 +79,4 @@ if __name__ == "__main__":
 
     #Predicciones en el directorio especificado
     predecir_directorio(modelo, PREDICT_DIR)
-            
+"""           

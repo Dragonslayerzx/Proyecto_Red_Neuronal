@@ -69,6 +69,7 @@ class RedNeuronal:
 
 
 #Bloque principal para ejecutar el entrenamiento
+"""
 if __name__ == "__main__":
     # 1. Cargar datos usando rutas absolutas basadas en la ubicación de este archivo
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -92,3 +93,4 @@ if __name__ == "__main__":
         X_test=datos_test['X'],
         y_test=datos_test['y']
     )
+"""
