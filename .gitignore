@@ -1,16 +1,8 @@
-# Ignora todo el contenido de data y subcarpetas
-/data/*
+# Ignora TODOS los archivos dentro de /data/
 /data/**
-
-# ¡Pero permite las carpetas!
 !/data/
 !/data/raw_images/
+!/data/raw_images/rostro_presente/
+!/data/raw_images/rostro_ausente/
 !/data/data_processed/
 !/data/predict_images/
-
-# Permite archivos de texto o markdown para mantener estructura
-!data/*.md
-!data/*.txt
-!data/raw_images/.gitkeep
-!data/data_processed/.gitkeep
-!data/predict_images/.gitkeep
