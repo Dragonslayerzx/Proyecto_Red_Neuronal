@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 from neural_network import RedNeuronal
+from config import IMAGE_SIZE
 
 def cargar_modelo(ruta_modelo, capas):
     """
@@ -16,11 +17,11 @@ def cargar_modelo(ruta_modelo, capas):
     datos = np.load(ruta_modelo)
     #print("Claves en el archivo del modelo:", list(datos.keys()))
     modelo = RedNeuronal(capas = capas)
-    #Se asignan los pesos en orden
-    modelo.pesos = [datos[f'pesos_{i}'] for i in range(len(capas) - 1)]
+    #Se asignan los pesos en orden de forma dinamica
+    modelo.pesos = [datos[f'pesos_{i}'] for i in range(len(capas) - 1)] #Carga dinamica de pesos
     return modelo
 
-def preprocesar_imagen(ruta_imagen, size=(800, 600)):
+def preprocesar_imagen(ruta_imagen, size=IMAGE_SIZE):
     """
     Preprocesa una imagen para que coincida con el formato de entrenamiento
     Args:
@@ -64,19 +65,4 @@ def predecir_directorio(modelo, directorio):
                 etiqueta, prob = predecir_imagen(modelo, ruta_completa)
                 print(f"{filename}: {etiqueta} (Probabilidad: {prob:.2f})")
             except Exception as e:
-                print(f"Error procesando {filename}: {e}")
-
-"""
-if __name__ == "__main__":
-    print("Iniciando el script de predicción...")
-    #Configuracion de rutas
-    DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
-    MODELO_DIR = os.path.join(DATA_DIR, "data_processed", "modelo_entrenado.npz")
-    PREDICT_DIR = os.path.join(DATA_DIR, "predict_images")
-
-    #Carga del modelo
-    modelo = cargar_modelo(ruta_modelo = MODELO_DIR, capas = [800*600, 64, 1])
-
-    #Predicciones en el directorio especificado
-    predecir_directorio(modelo, PREDICT_DIR)
-"""           
+                print(f"Error procesando {filename}: {e}")      

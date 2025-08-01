@@ -3,7 +3,7 @@ import cv2
 import os
 from sklearn.model_selection import train_test_split
 
-def cargar_y_preprocesar_imagenes(ruta_directorio, size=(800, 600)):
+def cargar_y_preprocesar_imagenes(ruta_directorio, size):
     """
     Carga y preprocesa imágenes desde un directorio.
     
@@ -42,7 +42,7 @@ def cargar_y_preprocesar_imagenes(ruta_directorio, size=(800, 600)):
     print(f"Total de imagenes cargadas: {len(imagenes)} (Rostro presente: {sum(etiquetas)}, Rostro ausente: {len(etiquetas) - sum(etiquetas)})")
     return X, y
 
-def dividir_y_guardar_datos(X, y, ruta_guardado, test_size=0.2, random_state=42):
+def dividir_y_guardar_datos(X, y, ruta_guardado, test_size=0.2):
     """
     Divide los datos en conjuntos de entrenamiento y prueba, y guarda los conjuntos en archivos .npz.
     
@@ -53,22 +53,9 @@ def dividir_y_guardar_datos(X, y, ruta_guardado, test_size=0.2, random_state=42)
         test_size (float): Proporción del conjunto de prueba.
         random_state (int): Semilla para la aleatoriedad.
     """
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
     
     np.savez(os.path.join(ruta_guardado, 'datos_entrenamiento.npz'), X=X_train, y=y_train)
     np.savez(os.path.join(ruta_guardado, 'datos_prueba.npz'), X=X_test, y=y_test)
     
     print(f"Datos guardados en {ruta_guardado}")
-
-"""
-# Funcion principal para ejecutar el procesamiento
-if __name__ == "__main__":
-    # 1. Definir rutas básicas
-    DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
-    RAW_DIR = os.path.join(DATA_DIR, "raw_images")
-    PROCESSED_DIR = os.path.join(DATA_DIR, "data_processed")
-    
-    # 2. Procesar y guardar
-    X, y = cargar_y_preprocesar_imagenes(RAW_DIR)
-    dividir_y_guardar_datos(X, y, PROCESSED_DIR)
-"""

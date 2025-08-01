@@ -21,7 +21,7 @@ class RedNeuronal:
         return 1 / (1 + np.exp(-x))
     
     def forward(self, X):
-        "Propagacion hacia adelante"
+        #Propagacion hacia adelante
         self.activaciones = [X]
 
         for i, w in enumerate(self.pesos):
@@ -30,7 +30,7 @@ class RedNeuronal:
             self.activaciones.append(a)
         return self.activaciones[-1]
     
-    def entrenar(self, X, y, epochs = 1000, lr = 0.01):
+    def entrenar(self, X, y, epochs, lr): 
         """
         Entrena la red neuronal usando descenso de gradiente "backpropagation".
         
@@ -62,35 +62,41 @@ class RedNeuronal:
                 print(f"Epoca {epoch}: Loss = {loss:.6f}")
         
     def evaluar(self, X_test, y_test):
-        """Evaluación de precisión"""
+        #Evaluación de precisión
         predicciones = self.forward(X_test) > 0.5
+        print("Predicciones:", predicciones.astype(int).flatten())
+        print("Etiquetas reales:", y_test.astype(int).flatten())
         precision = np.mean(predicciones == y_test.reshape(-1, 1))
+        y_test = y_test.reshape(-1, 1)
         print(f"Precisión en test: {precision * 100:.2f}%")
 
-
-#Bloque principal para ejecutar el entrenamiento
-"""
-if __name__ == "__main__":
-    # 1. Cargar datos usando rutas absolutas basadas en la ubicación de este archivo
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    datos_train = np.load(os.path.join(base_dir, "../data/data_processed/datos_entrenamiento.npz"))
-    datos_test = np.load(os.path.join(base_dir, "../data/data_processed/datos_prueba.npz"))
-    print(datos_train['X'].shape)  # Esto te dará (num_muestras, tamaño_vector)
-    # 2. Crear modelo
-    input_size = datos_train['X'].shape[1]  # Tamaño de entrada basado en los datos
-    modelo = RedNeuronal(capas=[input_size, 64, 1])  # 800x600 píxeles → 480000 neuronas entrada
+    # 3. Matriz de confusión manual
+        TP = np.sum((predicciones == 1) & (y_test == 1))
+        FP = np.sum((predicciones == 1) & (y_test == 0))
+        TN = np.sum((predicciones == 0) & (y_test == 0))
+        FN = np.sum((predicciones == 0) & (y_test == 1))
     
-    # 3. Entrenar
-    modelo.entrenar(
-        X=datos_train['X'],
-        y=datos_train['y'],
-        epochs=1000,
-        lr=0.0001   #Tasa de aprendizaje ajustada
-    )
+        print("\nMatriz de Confusión:")
+        print(f"                Predicción 0   Predicción 1")
+        print(f"Real 0 (Ausente)    {TN:5}           {FP:5}")
+        print(f"Real 1 (Presente)   {FN:5}           {TP:5}")
     
-    # 4. Evaluar
-    modelo.evaluar(
-        X_test=datos_test['X'],
-        y_test=datos_test['y']
-    )
-"""
+    # 4. Métricas por clase
+        if TP + FP > 0:
+            precision = TP / (TP + FP)
+            recall = TP / (TP + FN)
+            print(f"\nClase 1 (Rostro presente):")
+            print(f" - Precisión: {precision:.2%}")
+            print(f" - Recall:    {recall:.2%}")
+    
+        if TN + FN > 0:
+            specificity = TN / (TN + FP)
+            print(f"\nClase 0 (Rostro ausente):")
+            print(f" - Especificidad: {specificity:.2%}")
+    
+    # 5. Verificación de posibles problemas
+        if FP == 0 and FN == 0:
+            print("\n⚠️ ¡Precisión del 100% detectada! Verifica:")
+            print("- ¿El conjunto de test es muy pequeño?")
+            print("- ¿Hay contaminación entre train y test?")
+            print("- ¿Las imágenes son demasiado simples o uniformes?")
