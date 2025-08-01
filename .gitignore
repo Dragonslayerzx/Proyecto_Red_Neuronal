@@ -6,3 +6,6 @@
 !/data/raw_images/rostro_ausente/
 !/data/data_processed/
 !/data/predict_images/
+
+# Permite SOLO archivos .gitkeep en cualquier subcarpeta del data
+!**/.gitkeep
