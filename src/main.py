@@ -48,10 +48,9 @@ def entrenar_y_guardar_modelo():
     print("Modelo guardado exitosamente.")
 
 if __name__ == "__main__":
-    print("\n" \
-    "======== Red Neuronal de reconocimiento facial =========")
 
     while True:
+        print("\n======== Red Neuronal de reconocimiento facial =========")
         print("\nMENU PRINCIPAL")
         print("1. Entrenar modelo")
         print("2. Predecir imagenes")
@@ -74,7 +73,8 @@ if __name__ == "__main__":
             modelo = cargar_modelo(ruta_modelo=modelo_dir, capas=CAPAS) #Segun modelo entrenado
             predecir_directorio(
                 modelo = modelo,
-                directorio = img_dir
+                directorio = img_dir,
+                size = IMAGE_SIZE
             )
         elif opcion == "3":
             print("Saliendo del programa...")

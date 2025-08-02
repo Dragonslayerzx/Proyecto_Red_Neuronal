@@ -90,4 +90,5 @@ def dividir_y_guardar_datos(X, y, ruta_guardado):
     
     np.savez(os.path.join(ruta_guardado, 'datos_entrenamiento.npz'), X=X_train, y=y_train)
     np.savez(os.path.join(ruta_guardado, 'datos_prueba.npz'), X=X_test, y=y_test) 
-    print(f"Datos guardados en {ruta_guardado}\n(Test: {TEST_SIZE*100}%, Shuffle:{SHUFFLE_DATA}, Semilla: {RANDOM_STATE})")
+    print(f"Split de datos: (Test: {TEST_SIZE*100}%, Shuffle:{SHUFFLE_DATA}, Semilla: {RANDOM_STATE})")
+    print(f"Datos guardados en {ruta_guardado}")

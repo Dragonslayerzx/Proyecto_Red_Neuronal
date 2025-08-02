@@ -2,7 +2,6 @@ import os
 import cv2
 import numpy as np
 from neural_network import RedNeuronal
-from config import IMAGE_SIZE
 
 def cargar_modelo(ruta_modelo, capas):
     """
@@ -21,7 +20,7 @@ def cargar_modelo(ruta_modelo, capas):
     modelo.pesos = [datos[f'pesos_{i}'] for i in range(len(capas) - 1)] #Carga dinamica de pesos
     return modelo
 
-def preprocesar_imagen(ruta_imagen, size=IMAGE_SIZE):
+def preprocesar_imagen(ruta_imagen, size):
     """
     Preprocesa una imagen para que coincida con el formato de entrenamiento
     Args:
@@ -36,7 +35,7 @@ def preprocesar_imagen(ruta_imagen, size=IMAGE_SIZE):
     img = cv2.resize(img, size) # Redimensionar a 800x600
     return img.reshape(1, -1) / 255.0  # Normalizar y aplanar
 
-def predecir_imagen(modelo, ruta_imagen):
+def predecir_imagen(modelo, ruta_imagen, size):
     """
     Realiza una predicción sobre una imagen
     Args:
@@ -46,11 +45,11 @@ def predecir_imagen(modelo, ruta_imagen):
         tuple: (predicción, probabilidad)
     """
     #print("Tipo de modelo:", type(modelo))
-    X = preprocesar_imagen(ruta_imagen)
+    X = preprocesar_imagen(ruta_imagen, size)
     prob = modelo.forward(X)[0][0]  # Probabilidad entre 0 y 1
     return ("ROSTRO PRESENTE", prob) if prob > 0.5 else ("ROSTRO AUSENTE", 1 - prob)
 
-def predecir_directorio(modelo, directorio):
+def predecir_directorio(modelo, directorio, size):
     """
     Predice todas las imágenes válidas en un directorio
     Args:
@@ -61,8 +60,8 @@ def predecir_directorio(modelo, directorio):
     for filename in os.listdir(directorio):
         if filename.lower().endswith((".jpg", ".jpeg", ".png")):
             try:
-                ruta_completa = os.path.join(directorio, filename)
-                etiqueta, prob = predecir_imagen(modelo, ruta_completa)
+                ruta_imagen = os.path.join(directorio, filename)
+                etiqueta, prob = predecir_imagen(modelo, ruta_imagen, size)
                 print(f"{filename}: {etiqueta} (Probabilidad: {prob:.2f})")
             except Exception as e:
                 print(f"Error procesando {filename}: {e}")      
