@@ -9,7 +9,7 @@ def entrenar_y_guardar_modelo():
     #Flujo completo de entrenamiento y guardado del modelo
     print("\n============ Entrenamiento del modelo ==============")
     # 0. Mostrar configuración de parametros
-    print("\n=== Parámetros de Configuración ===")
+    print("\n====== Parámetros de Configuración ======")
     print(f"Arquitectura: {CAPAS}")
     print(f"Épocas: {EPOCAS}")
     print(f"Tasa de aprendizaje: {TASA_APRENDIZAJE}")
@@ -17,7 +17,7 @@ def entrenar_y_guardar_modelo():
   
     # 1. Cargar y preprocesar datos
     X, y = cargar_y_preprocesar_imagenes(ruta_directorio=RAW_DIR, size=IMAGE_SIZE)
-    dividir_y_guardar_datos(X, y, ruta_guardado=PROCESSED_DIR, test_size=0.2)
+    dividir_y_guardar_datos(X, y, ruta_guardado=PROCESSED_DIR)
 
     # 2. Crear y entrenar el modelo
     print("\nInicializando el modelo...")
@@ -63,7 +63,7 @@ if __name__ == "__main__":
             entrenar_y_guardar_modelo()
         elif opcion == "2":
             datos = np.load("data/data_processed/modelo_entrenado.npz")  # Ajusta la ruta
-            print("Archivos en el modelo:", list(datos.keys()))  # Ej: ['pesos_0', 'pesos_1']
+            #print("Archivos en el modelo:", list(datos.keys()))  # Ej: ['pesos_0', 'pesos_1'] revisar que cada capa se le asigne a un peso
             print("\n=============== Predicción de imágenes =================")
             modelo_dir = MODEL_DIR
             img_dir = PREDICT_DIR
