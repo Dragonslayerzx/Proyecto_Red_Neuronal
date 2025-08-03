@@ -62,6 +62,6 @@ def predecir_directorio(modelo, directorio, size):
             try:
                 ruta_imagen = os.path.join(directorio, filename)
                 etiqueta, prob = predecir_imagen(modelo, ruta_imagen, size)
-                print(f"{filename}: {etiqueta} (Probabilidad: {prob:.2f})")
+                print(f"{filename}: {etiqueta} (Probabilidad: {prob*100:.2f}%)")
             except Exception as e:
                 print(f"Error procesando {filename}: {e}")      

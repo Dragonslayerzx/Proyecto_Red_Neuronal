@@ -18,13 +18,27 @@ class RedNeuronal:
             self.biases.append(np.zeros((1, capas[i + 1]))) # Biases inicializados en cero
 
     def relu(self, x):
+        """"
+        Función de activación ReLU
+        Args:
+            x (np.array): Entrada de la función.
+        """
         return np.maximum(0, x)
     
     def sigmoide(self, x):
+        """
+        Función de activación sigmoide
+        Args:
+            x (np.array): Entrada de la función.
+        """
         return 1 / (1 + np.exp(-x))
     
     def forward(self, X):
-        #Propagacion hacia adelante
+        """
+        Propagación hacia adelante
+        Args:
+            X (np.array): Datos de entrada.
+        """
         self.activaciones = [X]
 
         for i, w in enumerate(self.pesos):
@@ -36,7 +50,6 @@ class RedNeuronal:
     def entrenar(self, X, y, epochs, lr): 
         """
         Entrena la red neuronal usando descenso de gradiente "backpropagation".
-        
         Args:
             X: Datos de entrada (matriz de caracteristicas).
             y: Etiquetas (vector objetivo).
@@ -47,11 +60,11 @@ class RedNeuronal:
             # Forward pass (guarda activaciones en self.activaciones)
             output = self.forward(X)
 
-            #Backpropagation
+            #Cálculo del error y deltas para la capa de salida
             error = output - y.reshape(-1, 1)
             deltas = [error * output * (1 - output)]  # Delta capa salida
 
-            #Propagacion hacia atras
+            #Backpropagation
             for i in reversed(range(len(self.pesos) - 1)):
                 #Delta para ReLU capas ocultas
                 deltas.insert(0, np.dot(deltas[0], self.pesos[i + 1].T) * (self.activaciones[i + 1] > 0))
@@ -61,11 +74,19 @@ class RedNeuronal:
                 self.pesos[i] -= lr * np.dot(self.activaciones[i].T, deltas[i]) #Actualiza pesos
                 self.biases[i] -= lr * np.sum(deltas[i], axis=0, keepdims=True) #Actualiza bias
 
+            #Impresion de perdida cada 100 epocas
             if epoch % 100 == 0:
                 loss = np.mean(error ** 2)
                 print(f"Epoca {epoch}: Loss = {loss:.6f}")
         
     def evaluar(self, X_test, y_test):
+        """
+        Evalúa el modelo en un conjunto de prueba.
+        Args:
+            X_test (np.array): Datos de entrada para la evaluación.
+            y_test (np.array): Etiquetas reales para la evaluación.
+        """
+        #Forward pass para obtener predicciones
         predicciones = self.forward(X_test) > 0.5
         y_test = y_test.reshape(-1, 1)
         incorrectas = np.where(predicciones != y_test)[0]
@@ -88,24 +109,24 @@ class RedNeuronal:
         precision = np.mean(predicciones == y_test.reshape(-1, 1))
         print(f"Precisión en test: {precision * 100:.2f}%")
 
-    # 3. Matriz de confusión manual
+        #Matriz de confusión
         TP = np.sum((predicciones == 1) & (y_test == 1))
         FP = np.sum((predicciones == 1) & (y_test == 0))
         TN = np.sum((predicciones == 0) & (y_test == 0))
         FN = np.sum((predicciones == 0) & (y_test == 1))
     
-        print("\n============Matriz de Confusión==============\n")
+        print("\n============Matriz de Confusión==============")
         print(f"                Predicción 0   Predicción 1")
         print(f"Real 0 (Ausente)    {TN:5}           {FP:5}")
         print(f"Real 1 (Presente)   {FN:5}           {TP:5}")
     
-    # 4. Métricas de evaluación
+        #Metricas de evaluación
         precision = TP / (TP + FP) if (TP + FP) > 0 else 0
         recall = TP / (TP + FN) if (TP + FN) > 0 else 0
         specificity = TN / (TN + FP) if (TN + FP) > 0 else 0
 
         print("\n=========Metricas de evaluación=========")
-        print(f"\nClase 1 (Presente):")
+        print(f"Clase 1 (Presente):")
         print(f"Precisión: {precision:.2%}  | Recall: {recall:.2%}")
         print(f"\nClase 0 (Ausente):")
         print(f"Especificidad: {specificity:.2%}")

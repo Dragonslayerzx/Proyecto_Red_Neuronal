@@ -6,10 +6,12 @@ from predict import predecir_directorio, cargar_modelo
 from config import CAPAS, EPOCAS, TASA_APRENDIZAJE, RAW_DIR, PROCESSED_DIR, MODEL_DIR, PREDICT_DIR, IMAGE_SIZE
 
 def entrenar_y_guardar_modelo():
-    #Flujo completo de entrenamiento y guardado del modelo
+    """
+    Flujo completo para entrenar y guardar el modelo de red neuronal.
+    """
     print("\n============ Entrenamiento del modelo ==============")
     # 0. Mostrar configuración de parametros
-    print("\n====== Parámetros de Configuración ======")
+    print("\n========== Parámetros de Configuración ==========")
     print(f"Arquitectura: {CAPAS}")
     print(f"Épocas: {EPOCAS}")
     print(f"Tasa de aprendizaje: {TASA_APRENDIZAJE}")
@@ -47,6 +49,30 @@ def entrenar_y_guardar_modelo():
     )
     print("Modelo guardado exitosamente.")
 
+def predecir_imagenes():
+    """
+    Flujo para predecir imágenes usando el modelo entrenado.
+    """
+    #datos = np.load(MODEL_DIR)  # Carga del modelo para debugging
+    #print("Archivos en el modelo:", list(datos.keys()))  # ['pesos_0', 'pesos_1'] revisar que cada capa se le asigne a un peso
+    print("\n============ Predicción de imágenes ==============")
+    modelo_dir = MODEL_DIR
+    img_dir = PREDICT_DIR
+
+    if not os.path.exists(modelo_dir):
+        print("Modelo no encontrado. Por favor, entrene primero.")
+        return
+
+    # Cargar el modelo
+    modelo = cargar_modelo(ruta_modelo=modelo_dir, capas=CAPAS)  # Segun modelo entrenado
+
+    # Predecir en el directorio de imágenes
+    predecir_directorio(
+        modelo=modelo,
+        directorio=img_dir,
+        size=IMAGE_SIZE
+    )
+
 if __name__ == "__main__":
 
     while True:
@@ -61,21 +87,7 @@ if __name__ == "__main__":
         if opcion == "1":
             entrenar_y_guardar_modelo()
         elif opcion == "2":
-            datos = np.load("data/data_processed/modelo_entrenado.npz")  # Ajusta la ruta
-            #print("Archivos en el modelo:", list(datos.keys()))  # Ej: ['pesos_0', 'pesos_1'] revisar que cada capa se le asigne a un peso
-            print("\n=============== Predicción de imágenes =================")
-            modelo_dir = MODEL_DIR
-            img_dir = PREDICT_DIR
-
-            if not os.path.exists(modelo_dir):
-                print("Modelo no encontrado. Por favor, entrene primero.")
-                continue
-            modelo = cargar_modelo(ruta_modelo=modelo_dir, capas=CAPAS) #Segun modelo entrenado
-            predecir_directorio(
-                modelo = modelo,
-                directorio = img_dir,
-                size = IMAGE_SIZE
-            )
+            predecir_imagenes()
         elif opcion == "3":
             print("Saliendo del programa...")
             break
